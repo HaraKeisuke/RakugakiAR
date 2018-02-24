@@ -47,6 +47,14 @@ class Brush {
             if((index < (points.count)-1)){
                 if(index > 0 && self.compareDistance(x: points[index - 1], y: point)){
                     _verticles.append(point)
+//                    (0..<360).map {index in
+//                        let r = 0.002
+//                        let x = cos(Double(index)) * cos(Double(index)) * r
+//                        let y = cos(Double(index)) * sin(Double(index)) * r
+//                        let z = sin(Double(index)) * r
+//                        _verticles.append(point + SCNVector3(x, y, z))
+//                    }
+                    
 //                    _verticles.append(point + SCNVector3(0.001, 0.001, 0.001))
 //                    _verticles.append(point + SCNVector3(-0.001, 0.001, 0.001))
 //                    _verticles.append(point + SCNVector3(-0.001, -0.001, 0.001))
@@ -71,18 +79,18 @@ class Brush {
         
         for i in 0..<(verticles.count)-1{
             if i < verticles.count-3 {
-                rtn += [UInt32(i), UInt32(i+1), UInt32(i+2)]
+                rtn += [UInt32(i), UInt32(i+1)]
             }
-            
-            if i < verticles.count-4 {
-                rtn += [UInt32(i), UInt32(i+2), UInt32(i+3)]
-            }
-            
-            if i < verticles.count-5 {
-                rtn += [UInt32(i), UInt32(i+3), UInt32(i+4)]
-            }
-            
-            
+//
+//            if i < verticles.count-4 {
+//                rtn += [UInt32(i), UInt32(i+2), UInt32(i+3)]
+//            }
+//
+//            if i < verticles.count-5 {
+//                rtn += [UInt32(i), UInt32(i+3), UInt32(i+4)]
+//            }
+//
+//
 
             
 //          rtn += [UInt32(i), UInt32(i+2)]

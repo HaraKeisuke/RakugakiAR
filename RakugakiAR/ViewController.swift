@@ -17,6 +17,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var path : SCNPath = SCNPath()
     var brush :Brush = Brush()
     var lineNode : SCNNode = SCNNode()
+    var timer: Timer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,8 +35,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         sceneView.scene.rootNode.addChildNode(lineNode)
         
-        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(tapView))
-        sceneView.addGestureRecognizer(gesture)
+//        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(tapView))
+//        sceneView.addGestureRecognizer(gesture)
+        timer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
+        timer.fire()
         
         // Set the scene to the view
         sceneView.scene = scene
@@ -84,28 +87,45 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
     }
     
-    @objc func tapView(sender: UILongPressGestureRecognizer){
-        
+    @objc func update() {
         guard let camera = sceneView.pointOfView else {
             return
         }
-
-        let position = SCNVector3(x: 0, y: 0, z: -0.05) // 偏差のベクトルを生成する
-        let convertPosition = camera.convertPosition(position, to: nil)
-
-        switch sender.state {
-        case .began:
-            print("ドラッグ開始")
-            brush.start(from: convertPosition)
-        case .ended:
-            print("ドラッグ終了")
-        default:
-            brush.updatePath(position: convertPosition)
-            lineNode.geometry = brush.geometry
-            lineNode.removeFromParentNode()
-            sceneView.scene.rootNode.addChildNode(lineNode)
+        
+        DispatchQueue(label: "dada").async {
+            let position = SCNVector3(x: 0, y: 0, z: -0.05) // 偏差のベクトルを生成する
+            let convertPosition = camera.convertPosition(position, to: nil)
+            self.brush.updatePath(position: convertPosition)
+            self.lineNode.geometry = self.brush.geometry
+            self.lineNode.removeFromParentNode()
+            self.sceneView.scene.rootNode.addChildNode(self.lineNode)
         }
+        
+
     }
+    
+//    @objc func tapView(sender: UILongPressGestureRecognizer){
+//
+//        guard let camera = sceneView.pointOfView else {
+//            return
+//        }
+//
+//        let position = SCNVector3(x: 0, y: 0, z: -0.05) // 偏差のベクトルを生成する
+//        let convertPosition = camera.convertPosition(position, to: nil)
+//
+//        switch sender.state {
+//        case .began:
+//            print("ドラッグ開始")
+//            brush.start(from: convertPosition)
+//        case .ended:
+//            print("ドラッグ終了")
+//        default:
+//            brush.updatePath(position: convertPosition)
+//            lineNode.geometry = brush.geometry
+//            lineNode.removeFromParentNode()
+//            sceneView.scene.rootNode.addChildNode(lineNode)
+//        }
+//    }
     
 //    private func updateLine(){
 ////        lineNode = SCNLine(path: path)
